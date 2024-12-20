@@ -14,7 +14,6 @@ from utils import load_language, generate_token
 bot = Client("bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
 db = Database()
 
-
 @bot.on_message(filters.command("start") & filters.private)
 async def start_handler(client, message):
     user_id = message.from_user.id
@@ -25,6 +24,11 @@ async def start_handler(client, message):
         db.add_user(user_id)
 
     user_lang = db.get_language(user_id)
+    if not user_lang:
+        # Default to English if language not set
+        user_lang = "eng"
+        db.set_language(user_id, user_lang)
+    
     lang = load_language(user_lang)
 
     if len(command_args) > 1:
@@ -44,12 +48,74 @@ async def start_handler(client, message):
                 await message.reply_text(lang["referral_joined"])
             return
 
-    # Regular start message
-    keyboard = InlineKeyboardMarkup(
-        [[InlineKeyboardButton(lang["join_button"], callback_data="check_join")]]
-    )
+    # Create keyboard based on whether the user has already set their language
+    keyboard_buttons = []
+    if not db.is_language_set(user_id):
+        keyboard_buttons.append([InlineKeyboardButton("Set Language", callback_data="set_language")])
+
+    keyboard = InlineKeyboardMarkup(keyboard_buttons)
+
     text = f"{lang['start_message']}\n\n" + "\n".join([f"- {channel}" for channel in CHANNELS])
     await message.reply_text(text, reply_markup=keyboard)
+
+@bot.on_callback_query(filters.regex("set_language"))
+async def set_language_button_handler(client, callback_query):
+    """Handles the 'Set Language' button click and shows language options."""
+    keyboard = InlineKeyboardMarkup([
+        [
+            InlineKeyboardButton("English", callback_data="set_lang_eng"),
+            InlineKeyboardButton("Hindi", callback_data="set_lang_hin")
+        ],
+        [
+            InlineKeyboardButton("Tamil", callback_data="set_lang_tam"),
+            InlineKeyboardButton("French", callback_data="set_lang_fre")
+        ],
+        [
+            InlineKeyboardButton("Persian", callback_data="set_lang_per"),
+            InlineKeyboardButton("Indonesian", callback_data="set_lang_id")
+        ]
+    ])
+    await callback_query.message.edit_text(
+        "Please select your language:",
+        reply_markup=keyboard
+    )
+
+
+@bot.on_message(filters.command("language") & filters.private)
+async def set_language_command(client, message):
+    user_id = message.from_user.id
+    keyboard = InlineKeyboardMarkup([
+        [
+            InlineKeyboardButton("English", callback_data="set_lang_eng"),
+            InlineKeyboardButton("Hindi", callback_data="set_lang_hin")
+        ],
+        [
+            InlineKeyboardButton("Tamil", callback_data="set_lang_tam"),
+            InlineKeyboardButton("French", callback_data="set_lang_fre")
+        ],
+        [
+            InlineKeyboardButton("Persian", callback_data="set_lang_per"),
+            InlineKeyboardButton("Indonesian", callback_data="set_lang_id")
+        ]
+    ])
+    await message.reply_text("Please select your language:", reply_markup=keyboard)
+
+
+@bot.on_callback_query(filters.regex(r"set_lang_(\w+)"))
+async def set_language_callback(client, callback_query):
+    user_id = callback_query.from_user.id
+    language_code = callback_query.data.split("_")[-1]
+
+    db.set_language(user_id, language_code)  # Save the selected language to the database
+    lang = load_language(language_code)
+
+    await callback_query.answer("Language updated successfully!")
+    await callback_query.message.reply_text(lang["start_message"])
+
+
+
+
+
 
 
 @bot.on_message(filters.command("clone") & filters.private)
