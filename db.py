@@ -33,3 +33,40 @@ def is_valid_ad_token(token):
 def consume_ad_token(token):
     """Consume and remove an ad token from the database."""
     return AD_TOKENS.pop(token, None)
+    
+import time
+
+
+class Database:
+    def __init__(self):
+        self.users = {}  # {user_id: {"language": "en", "premium_expires": 0, "referrals": 0}}
+        self.referrals = {}  # {referrer_id: [list_of_referred_users]}
+        self.ad_tokens = {}  # For ad verification
+
+    def add_user(self, user_id, language="en"):
+        if user_id not in self.users:
+            self.users[user_id] = {"language": language, "premium_expires": 0, "referrals": 0}
+
+    def set_language(self, user_id, language):
+        if user_id in self.users:
+            self.users[user_id]["language"] = language
+
+    def get_language(self, user_id):
+        return self.users[user_id].get("language", "en")
+
+    def add_premium(self, user_id, days):
+        expires = self.users[user_id].get("premium_expires", 0)
+        self.users[user_id]["premium_expires"] = max(time.time(), expires) + (days * 86400)
+
+    def is_premium(self, user_id):
+        return self.users[user_id]["premium_expires"] > time.time()
+
+    def add_referral(self, referrer_id, referred_id):
+        if referrer_id not in self.referrals:
+            self.referrals[referrer_id] = []
+        self.referrals[referrer_id].append(referred_id)
+        self.users[referrer_id]["referrals"] += 1
+
+    def get_referrals(self, referrer_id):
+        return self.users[referrer_id]["referrals"]
+        
