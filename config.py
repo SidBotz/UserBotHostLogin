@@ -6,7 +6,7 @@ XD = 5  # Number of referrals required for Premium
 XDAYS = 7  # Premium duration for referrals (in days)
 API = "1200d6c28a7e63de00fe26ef3d513882c98ff028"
 URL = "linkpays.in"
-LANGUAGE_DIR = "./languages/"
+LANGUAGE_DIR = "./Languages"
 
 START_MESSAGE = "Welcome to the Bot Host Service! Join the channels below to proceed."
 AFTER_JOIN_MESSAGE = "Great! Now choose your hosting option below."
