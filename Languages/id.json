@@ -1,0 +1,18 @@
+{
+    "start_message": "Selamat datang di Bot! Silakan gabung ke saluran di bawah ini untuk melanjutkan.",
+    "join_button": "Sudah Gabung",
+    "choose_option": "Pilih opsi cloning Anda di bawah:",
+    "phone_option": "Nomor Telepon",
+    "session_option": "String Session",
+    "token_option": "Token Bot",
+    "free_premium": "Dapatkan Premium Gratis",
+    "buy_premium": "Beli Premium",
+    "premium_required": "Anda memerlukan Premium untuk menggunakan cloning. Pilih opsi di bawah:",
+    "free_premium_info": "Dapatkan Premium secara gratis dengan metode berikut:",
+    "referral_option": "Referral",
+    "view_ads_option": "Tonton Iklan",
+    "referral_instructions": "Referensikan {XD} pengguna untuk mendapatkan Premium selama {XDAYS} hari.\n\nTautan referral Anda:\n{link}",
+    "share_referral": "Bagikan Tautan Referral",
+    "referral_success": "Anda telah mereferensikan {count} pengguna dan mendapatkan Premium selama {days} hari!",
+    "referral_joined": "Anda bergabung menggunakan tautan referral. Terima kasih!"
+}
