@@ -14,5 +14,8 @@
     "referral_instructions": "Refer {XD} users to earn {XDAYS} days of Premium.\n\nYour referral link:\n{link}",
     "share_referral": "Share Referral Link",
     "referral_success": "You referred {count} users and earned {days} days of Premium!",
-    "referral_joined": "You joined using a referral link. Thank you!"
+    "referral_joined": "You joined using a referral link. Thank you!",
+    "VerifyText": "Watch the ad using the button below. Once done, return and start the bot using this link to verify",
+    "HowToVerify?": "Video Tutorial",
+    "VerifyButton": "Verify And Get Premium"
 }
