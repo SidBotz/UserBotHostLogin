@@ -37,36 +37,67 @@ def consume_ad_token(token):
 import time
 
 
+
+import time
+
 class Database:
     def __init__(self):
+        # Initialize in-memory storage for users, referrals, and ad tokens
         self.users = {}  # {user_id: {"language": "en", "premium_expires": 0, "referrals": 0}}
         self.referrals = {}  # {referrer_id: [list_of_referred_users]}
         self.ad_tokens = {}  # For ad verification
 
     def add_user(self, user_id, language="en"):
+        """Add a new user to the database with a default language (English)."""
         if user_id not in self.users:
             self.users[user_id] = {"language": language, "premium_expires": 0, "referrals": 0}
 
-    def set_language(self, user_id, language):
+    def set_language(self, user_id, language_code):
+        """Save the user's language preference."""
         if user_id in self.users:
-            self.users[user_id]["language"] = language
+            self.users[user_id]["language"] = language_code
 
     def get_language(self, user_id):
-        return self.users[user_id].get("language", "en")
+        """Retrieve the user's current language preference."""
+        return self.users[user_id].get("language", "en")  # Default to "en" if no language is set
+
+    def is_language_set(self, user_id):
+        """Check if the user has set a language."""
+        return user_id in self.users and "language" in self.users[user_id] and self.users[user_id]["language"] != "en"
 
     def add_premium(self, user_id, days):
+        """Add premium status to the user for a certain number of days."""
+        if user_id not in self.users:
+            return  # User not found, don't process
+
         expires = self.users[user_id].get("premium_expires", 0)
+        # Set premium expiration to the max of the current time or the existing expiration time, plus the new premium days
         self.users[user_id]["premium_expires"] = max(time.time(), expires) + (days * 86400)
 
     def is_premium(self, user_id):
+        """Check if the user has an active premium status."""
+        if user_id not in self.users:
+            return False
         return self.users[user_id]["premium_expires"] > time.time()
 
     def add_referral(self, referrer_id, referred_id):
+        """Add a referral from one user to another."""
         if referrer_id not in self.referrals:
             self.referrals[referrer_id] = []
-        self.referrals[referrer_id].append(referred_id)
-        self.users[referrer_id]["referrals"] += 1
+
+        # Ensure the referred user isn't already referred by the same person
+        if referred_id not in self.referrals[referrer_id]:
+            self.referrals[referrer_id].append(referred_id)
+            self.users[referrer_id]["referrals"] += 1
 
     def get_referrals(self, referrer_id):
-        return self.users[referrer_id]["referrals"]
-        
+        """Get the total number of referrals made by the user."""
+        return self.users[referrer_id].get("referrals", 0)
+
+    def add_ad_token(self, token, user_id):
+        """Store an ad token for ad verification purposes."""
+        self.ad_tokens[token] = user_id
+
+    def get_ad_token_user(self, token):
+        """Get the user associated with an ad token."""
+        return self.ad_tokens.get(token)
