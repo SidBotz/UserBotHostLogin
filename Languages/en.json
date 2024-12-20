@@ -1,0 +1,18 @@
+{
+    "start_message": "Welcome to the Bot! Please join the channels below to proceed.",
+    "join_button": "Joined",
+    "choose_option": "Choose your cloning option below:",
+    "phone_option": "Phone Number",
+    "session_option": "String Session",
+    "token_option": "Bot Token",
+    "free_premium": "Get Free Premium",
+    "buy_premium": "Buy Premium",
+    "premium_required": "You need Premium to use cloning. Choose an option below:",
+    "free_premium_info": "Get Premium for free by using these methods:",
+    "referral_option": "Referral",
+    "view_ads_option": "View Ads",
+    "referral_instructions": "Refer {XD} users to earn {XDAYS} days of Premium.\n\nYour referral link:\n{link}",
+    "share_referral": "Share Referral Link",
+    "referral_success": "You referred {count} users and earned {days} days of Premium!",
+    "referral_joined": "You joined using a referral link. Thank you!"
+}
