@@ -64,7 +64,7 @@ async def set_language_button_handler(client, callback_query):
     keyboard = InlineKeyboardMarkup([
         [
             InlineKeyboardButton("English", callback_data="set_lang_eng"),
-            InlineKeyboardButton("Hindi", callback_data="set_lang_hin")
+            InlineKeyboardButton("Hindi", callback_data="set_lang_hi")
         ],
         [
             InlineKeyboardButton("Tamil", callback_data="set_lang_tam"),
@@ -87,7 +87,7 @@ async def set_language_command(client, message):
     keyboard = InlineKeyboardMarkup([
         [
             InlineKeyboardButton("English", callback_data="set_lang_eng"),
-            InlineKeyboardButton("Hindi", callback_data="set_lang_hin")
+            InlineKeyboardButton("Hindi", callback_data="set_lang_hi")
         ],
         [
             InlineKeyboardButton("Tamil", callback_data="set_lang_tam"),
